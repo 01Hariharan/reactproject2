@@ -40,10 +40,10 @@ function Userlist() {
         return(
             <tr>
                 <th scope="row">{item.ID_no}</th>
-                <th scope="row">{item.name}</th>
-                <th scope="row">{item.DOB}</th>
-                <th scope="row">{item.Phone}</th>
-                <th scope="row">{item.mail}</th>
+                <td>{item.name}</td>
+                <td>{item.DOB}</td>
+                <td>{item.Phone}</td>
+                <td>{item.mail}</td>
                 </tr>
         );
     })}
