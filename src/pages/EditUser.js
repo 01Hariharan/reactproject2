@@ -1,42 +1,57 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import "./CreateUser.css";
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 
-function CreateUser() {
-
+function EditUser() {
   const navigate = useNavigate();
+  const{id} = useParams()
 
   const [userInput, setUserInput] = useState({
+    
     name: "",
     age: "",
     phone: "",
     mail: "",
   })
 
+  useEffect(()=>{
+    getData();
+  },[]);
+
+  const getData = async()=>{
+    const userData = await axios.get(
+     `https://683de27e199a0039e9e7335c.mockapi.io/EMP/EMP/${id}`
+    )
+    setUserInput(userData.data);
+    // console.log(userData.data);
+    
+  }
+
   const handleChange = ({ target: { name, value } }) => {
     setUserInput({...userInput, [name]:value })
   }
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const { name, age, phone, mail } = userInput
+    const {name, age, phone, mail } = userInput;
 
-    const postData = await axios.post(
-      "https://683de27e199a0039e9e7335c.mockapi.io/EMP/EMP",
-      {name, age, phone, mail }
+    const postData = await axios.put(
+      `https://683de27e199a0039e9e7335c.mockapi.io/EMP/EMP/${id}`,
+      { name, age, phone, mail }
     );
 
     if(postData) {
-      navigate("/user")
+      navigate("/user");
     }
   }
 
   return (
     <div className='form_container'>
       <form onSubmit={handleSubmit}>
-        <h1 style={{ textAlign: "center" }}>User Registration</h1>
+        <h1 style={{ textAlign: "center" }}>
+          Edit details
+        </h1>
         
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">
@@ -49,6 +64,7 @@ function CreateUser() {
             aria-describedby='emailHelp'
             name='name'
             onChange={handleChange}
+            value={userInput.name}
             autoComplete='off'
           />
         </div>
@@ -63,6 +79,7 @@ function CreateUser() {
             aria-describedby='emailHelp'
             name='age'
             onChange={handleChange}
+            value={userInput.age}
             autoComplete='off'
           />
         </div>
@@ -77,12 +94,13 @@ function CreateUser() {
             aria-describedby='emailHelp'
             name='phone'
             onChange={handleChange}
+            value={userInput.phone}
             autoComplete='off'
           />
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">
-            Mail
+            mail
           </label>
           <input
             type="email"
@@ -91,6 +109,7 @@ function CreateUser() {
             aria-describedby='emailHelp'
             name='mail'
             onChange={handleChange}
+            value={userInput.mail}
             autoComplete='off'
           />
         </div>
@@ -105,4 +124,4 @@ function CreateUser() {
   )
 }
 
-export default CreateUser
+export default EditUser
